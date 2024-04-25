@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-import timedelta
+from django.conf import settings
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,8 +27,6 @@ SECRET_KEY = 'django-insecure-qihxm%n7x@#bmjafe0ud@3$*i8=*8@xr5dyg0e_&c69+)2obyl
 DEBUG = True
 
 ALLOWED_HOSTS = []
-AUTH_USER_MODEL = 'pes.Register'
-
 
 # Application definition
 
@@ -39,7 +37,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework_simplejwt',
     'rest_framework',
     'corsheaders',
     'pes.apps.PesConfig',
@@ -57,25 +54,14 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
 ]
 
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ],
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
-    ],
-}
-
-# SIMPLE_JWT = {
-#     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
-#     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
-#     'SLIDING_TOKEN_LIFETIME': timedelta(days=30),
-#     'SLIDING_TOKEN_REFRESH_LIFETIME_LATE_USER': timedelta(days=1),
-#     'SLIDING_TOKEN_LIFETIME_LATE_USER': timedelta(days=30),
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': [
+#         'rest_framework_simplejwt.authentication.JWTAuthentication',
+#     ],
+#     'DEFAULT_PERMISSION_CLASSES': [
+#         'rest_framework.permissions.IsAuthenticated',
+#     ],
 # }
-
-
-CORS_ALLOW_ALL_ORIGINS = True
 
 ROOT_URLCONF = 'backend.urls'
 
@@ -102,25 +88,39 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 # DATABASES = {
-#      'default': {
-#          'ENGINE': 'django.db.backends.sqlite3',
-#          'NAME': BASE_DIR / 'db.sqlite3',
-#      }
-#  }
+#       'default': {
+#           'ENGINE': 'django.db.backends.sqlite3',
+#           'NAME': BASE_DIR / 'db.sqlite3',
+#       }
+# }
 
 DATABASES = {
-     'default': {
-         'ENGINE': 'mssql',
-         'NAME': 'PES_Main',
-         'USER': 'pes',
-         'PASSWORD': 'pes',
-         'HOST': '192.168.0.120',
-         'PORT': '', 
-         'OPTIONS': {
-             'driver': 'ODBC Driver 17 for SQL Server',
-         },
-     }
- }
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'pes', 
+        'USER': 'root',              
+        'PASSWORD': '',              
+        'HOST': 'localhost',        
+        'PORT': '3306',    
+        'OPTIONS': {
+            'sql_mode': 'STRICT_TRANS_TABLES'  # Enable strict mode
+        }          
+    }
+}
+
+# DATABASES = {
+#      'default': {
+#          'ENGINE': 'mssql',
+#          'NAME': 'PES_Main',
+#          'USER': 'pes',
+#          'PASSWORD': 'pes',
+#          'HOST': '192.168.0.120',
+#          'PORT': '', 
+#          'OPTIONS': {
+#              'driver': 'ODBC Driver 17 for SQL Server',
+#          },
+#      }
+#  }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -163,3 +163,6 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+AUTH_USER_MODEL = 'pes.User'
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_ALLOW_ALL = True
